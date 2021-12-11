@@ -17,6 +17,7 @@ export class UserService {
     user.lastname = payload.lastname;
     user.email = payload.email;
     user.password = payload.password;
-    await this.userRepository.save(user);
+    const success = await this.userRepository.save(user);
+    console.log(success);
   }
 }
