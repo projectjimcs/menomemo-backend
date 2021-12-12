@@ -15,6 +15,8 @@ export class UserController {
   createUser(
     @Body() body: CreateUserDto
   ) {
-    this.userService.create(body);
+    this.userService.create(body).catch(err => {
+      console.log('Error'); // !!!
+    });
   }
 }

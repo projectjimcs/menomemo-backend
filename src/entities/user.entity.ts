@@ -51,6 +51,7 @@ export class User {
 
   @Column({
     name: 'created_by',
+    nullable: true,
   })
   createdBy: number;
 
