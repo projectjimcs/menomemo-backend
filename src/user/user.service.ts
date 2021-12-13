@@ -21,9 +21,20 @@ export class UserService {
     user.email = payload.email;
     user.password = payload.password;
 
-    const employeeType = await this.userTypeRepository.findOne({where: {key: 'employee'}});
+    const employeeType = await this.userTypeRepository.findOne({
+      where: {key: 'employee'}
+    });
     user.usertypeId = employeeType.id
     
     const success = await this.userRepository.save(user);
+    // !!! Return something?
+  }
+
+  async findUserByEmail(email: string): Promise<User | undefined> {
+    return await this.userRepository.findOne({
+      where: {
+        email: email,
+      }
+    });
   }
 }
