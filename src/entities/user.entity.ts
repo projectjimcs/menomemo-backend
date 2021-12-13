@@ -32,6 +32,7 @@ export class User {
   @Column()
   password: string;
 
+  @Column()
   @Generated("uuid")
   uuid: string;
 
