@@ -11,7 +11,7 @@ export class LoginController {
   @UseGuards(LocalAuthGuard)
   @Post()
   async login(@Req() req, @Res({ passthrough: true }) res: Response) {
-    const token = await this.authService.login(req.user);
+    const token = await this.authService.getAccessToken(req.user);
     const refreshToken = await this.authService.getRefreshToken(req.user.uuid);
 
     const secretData = {

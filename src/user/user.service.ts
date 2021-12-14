@@ -52,4 +52,12 @@ export class UserService {
       uuid: uuid,
     }, updateData);
   }
+
+  async findUserByRefreshToken(token: string): Promise<User | undefined> {
+    return await this.userRepository.findOne({
+      where: {
+        refreshToken: token,
+      }
+    });
+  }
 }
