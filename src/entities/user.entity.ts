@@ -51,6 +51,19 @@ export class User {
   usertype: UserType;
 
   @Column({
+    name: 'refresh_token',
+    nullable: true,
+  })
+  refreshToken: string;
+
+  @Column({
+    type: 'timestamp',
+    name: 'refresh_token_exp',
+    nullable: true,
+  })
+  refreshTokenExp: Date;
+
+  @Column({
     name: 'created_by',
     nullable: true,
   })
