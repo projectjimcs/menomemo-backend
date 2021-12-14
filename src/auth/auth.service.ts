@@ -49,10 +49,6 @@ export class AuthService {
     }
   }
 
-  async validateRefreshToken(token: string) {
-
-  }
-
   async getRefreshToken(userUuid: string): Promise<string> {
     const refreshTokenUpdateData = {
       refreshToken: randomToken.generate(16),

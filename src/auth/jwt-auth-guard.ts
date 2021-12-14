@@ -1,4 +1,4 @@
-import { ExecutionContext, Injectable, UnauthorizedException, Req, Res } from '@nestjs/common';
+import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import { ExtractJwt } from 'passport-jwt';
@@ -79,7 +79,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   
       return this.activate(context);
     } catch (err) {
-      console.log(err)
       return false;
     }
   }
