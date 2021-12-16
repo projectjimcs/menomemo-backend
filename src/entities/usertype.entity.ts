@@ -17,6 +17,6 @@ export class UserType {
   @Column()
   name: string;
 
-  @OneToMany(() => User, users => users.usertype)
+  @OneToMany(() => User, user => user.usertype)
   users: User[];
 }

@@ -1,8 +1,7 @@
-import { Controller, Req, Post, UseGuards, Res, Get } from '@nestjs/common';
+import { Controller, Req, Post, UseGuards, Res } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { LocalAuthGuard } from 'src/auth/local-auth-guard';
 import { Response } from 'express';
-import { JwtAuthGuard } from 'src/auth/jwt-auth-guard';
 
 @Controller('login')
 export class LoginController {
@@ -21,11 +20,5 @@ export class LoginController {
 
     res.cookie('auth-cookie', secretData, {httpOnly: true})
       .send({ success: true });
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('profile')
-  getProfile(@Req() req) {
-    return 'secure route';
   }
 }

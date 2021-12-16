@@ -44,7 +44,7 @@ export class User {
   })
   usertypeId: number;
 
-  @ManyToOne(() => UserType, usertypes => usertypes.users)
+  @ManyToOne(() => UserType, usertype => usertype.users, { eager: true })
   @JoinColumn({
     name: 'usertype_id',
   })

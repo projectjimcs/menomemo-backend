@@ -75,8 +75,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         refreshToken: newRefreshToken,
       };
 
+      request.cookies['auth-cookie'] = secretData;
       response.cookie('auth-cookie', secretData, {httpOnly: true})
-  
+
       return this.activate(context);
     } catch (err) {
       return false;

@@ -24,7 +24,7 @@ export class UserService {
     const employeeType = await this.userTypeRepository.findOne({
       where: {key: 'employee'}
     });
-    user.usertypeId = employeeType.id
+    user.usertype = employeeType;
     
     const success = await this.userRepository.save(user);
     // !!! Return something?

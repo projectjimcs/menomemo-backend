@@ -17,7 +17,6 @@ export class AuthService {
 
   async validateUser(authLoginDto: AuthLoginDto): Promise<any> {
     const { email, password } = authLoginDto;
-
     const user = await this.userService.findUserByEmail(email);
 
     if (user && await user.validatePassword(password)) {
@@ -52,7 +51,7 @@ export class AuthService {
   async getRefreshToken(userUuid: string): Promise<string> {
     const refreshTokenUpdateData = {
       refreshToken: randomToken.generate(16),
-      refreshTokenExp: moment().day(this.TOKEN_LENGTH).format('YYYY-MM-DD HH:mm:ss'),
+      refreshTokenExp: moment().add(this.TOKEN_LENGTH, 'days').format('YYYY-MM-DD HH:mm:ss'),
     }
 
     await this.userService.updateUserByUuid(userUuid, refreshTokenUpdateData);
