@@ -17,7 +17,7 @@ import { LocalStrategy } from './local.strategy';
         return {
           secret: configService.get<string>('JWT_SECRET'),
           signOptions: {
-            expiresIn: '10s', // !!! Put time in env
+            expiresIn: '20s', // !!! Put time in env
           },
         };
       },

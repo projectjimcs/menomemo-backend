@@ -5,6 +5,7 @@ import { ExtractJwt } from 'passport-jwt';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
 import * as moment from 'moment';
+import * as cookieParser from 'cookie-parser';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -21,7 +22,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     try {
       // !!! REFACTOR THIS?
-      const accessToken = ExtractJwt.fromExtractors([
+      let accessToken = ExtractJwt.fromExtractors([
         (request: Request) => {
           const data = request?.cookies['auth-cookie'];
 
@@ -30,10 +31,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
           }
 
           return data.token;
-        }
+        },
+        ExtractJwt.fromHeader('cookie'),
       ])(request);
 
-      const refreshToken = ExtractJwt.fromExtractors([
+      let refreshToken = ExtractJwt.fromExtractors([
         (request: Request) => {
           const data = request?.cookies['auth-cookie'];
 
@@ -45,6 +47,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         }
       ])(request);
 
+      let parsedCookie = cookieParser.JSONCookie(accessToken);
+
+      accessToken = parsedCookie && parsedCookie.hasOwnProperty('token') ? parsedCookie['token'] : accessToken;
+      refreshToken = parsedCookie && parsedCookie.hasOwnProperty('refreshToken') ? parsedCookie['refreshToken'] : refreshToken;
+
       if (!accessToken) {
         throw new UnauthorizedException('Access token is not set');
       }
@@ -52,6 +59,13 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       const isValidAccessToken = await this.authService.validateToken(accessToken);
 
       if (isValidAccessToken) {
+        const cookieData = {
+          token: accessToken,
+          refreshToken,
+        }
+
+        request.secretData = cookieData;
+        request.cookies['auth-cookie'] = cookieData;
         return this.activate(context);
       }
 
@@ -76,7 +90,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       };
 
       request.cookies['auth-cookie'] = secretData;
-      response.cookie('auth-cookie', secretData, {httpOnly: true})
+      response.cookie('auth-cookie', secretData, {httpOnly: true});
+      request.secretData = secretData;
 
       return this.activate(context);
     } catch (err) {
