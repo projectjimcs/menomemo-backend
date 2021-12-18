@@ -36,6 +36,12 @@ export class User {
   @Generated("uuid")
   uuid: string;
 
+  @Column({
+    name: 'company_id',
+    nullable: true,
+  })
+  companyId: number;
+
   @Column({ default: 'active' })
   status: string;
 
