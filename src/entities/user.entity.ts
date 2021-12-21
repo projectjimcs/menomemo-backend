@@ -69,6 +69,12 @@ export class User {
   usertype: UserType;
 
   @Column({
+    name: 'is_doctor',
+    default: false,
+  })
+  isDoctor: boolean;
+
+  @Column({
     name: 'refresh_token',
     nullable: true,
   })

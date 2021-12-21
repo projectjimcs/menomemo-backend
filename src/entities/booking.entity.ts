@@ -67,10 +67,10 @@ export class Booking {
   bookedWith: number;
 
   @Column({
-    name: 'completed',
+    name: 'is_completed',
     default: false,
   })
-  completed: boolean;
+  isCompleted: boolean;
 
   @CreateDateColumn({
     type: 'timestamp',
