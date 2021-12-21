@@ -2,20 +2,19 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  ManyToOne,
   Generated,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  BeforeInsert,
+  ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
-import { UserType } from './usertype.entity';
 import { Company } from './company.entity';
-import * as bcrypt from 'bcrypt';
+import { Booking } from './booking.entity';
 
-@Entity({name: 'users'})
-export class User {
+@Entity({name: 'patients'})
+export class Patient {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -25,14 +24,6 @@ export class User {
   @Column()
   lastname: string;
 
-  @Column({
-    unique: true
-  })
-  email: string;
-
-  @Column()
-  password: string;
-
   @Column()
   @Generated("uuid")
   uuid: string;
@@ -40,6 +31,9 @@ export class User {
   @Column({
     nullable: true,
   })
+  email: string;
+
+  @Column()
   phone: number;
 
   @Column({
@@ -48,7 +42,7 @@ export class User {
   })
   companyId: number;
 
-  @ManyToOne(() => Company, company => company.users)
+  @ManyToOne(() => Company, company => company.patients)
   @JoinColumn({
     name: 'company_id',
   })
@@ -56,31 +50,7 @@ export class User {
 
   @Column({ default: 'active' })
   status: string;
-
-  @Column({
-    name: 'usertype_id',
-  })
-  usertypeId: number;
-
-  @ManyToOne(() => UserType, usertype => usertype.users, { eager: true })
-  @JoinColumn({
-    name: 'usertype_id',
-  })
-  usertype: UserType;
-
-  @Column({
-    name: 'refresh_token',
-    nullable: true,
-  })
-  refreshToken: string;
-
-  @Column({
-    type: 'timestamp',
-    name: 'refresh_token_exp',
-    nullable: true,
-  })
-  refreshTokenExp: Date;
-
+  
   @Column({
     name: 'created_by',
     nullable: true,
@@ -105,12 +75,6 @@ export class User {
   })
   deletedAt: Date;
 
-  @BeforeInsert()
-  async hashPassword() {
-    this.password = await bcrypt.hash(this.password, 10);
-  }
-
-  async validatePassword(password: string): Promise<boolean> {
-    return bcrypt.compare(password, this.password);
-  }
+  @OneToMany(() => Booking, booking => booking.patient)
+  bookings: Booking[];
 }
