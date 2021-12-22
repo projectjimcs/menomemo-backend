@@ -73,7 +73,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         throw new UnauthorizedException('Refresh token is not set');
       }
 
-      const user = await this.userService.findUserByRefreshToken(refreshToken);
+      const user = await this.userService.findUserByRefreshToken(refreshToken, ['company']);
 
       const isValidRefreshToken = moment.utc(user.refreshTokenExp).isSameOrAfter(moment.utc());
 
@@ -95,7 +95,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
       return this.activate(context);
     } catch (err) {
-      return false;
+      return false; // !!! Delete cookies
     }
   }
 

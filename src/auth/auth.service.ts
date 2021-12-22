@@ -17,7 +17,7 @@ export class AuthService {
 
   async validateUser(authLoginDto: AuthLoginDto): Promise<any> {
     const { email, password } = authLoginDto;
-    const user = await this.userService.findUserByEmail(email);
+    const user = await this.userService.findUserByEmail(email, ['company']);
 
     if (user && await user.validatePassword(password)) {
       const { password, refreshToken, refreshTokenExp, ...result } = user;
@@ -27,14 +27,14 @@ export class AuthService {
     return null;
   }
 
-  async validateToken(token: string) {
+  async validateToken(token: string, isReturnUser: boolean = false) {
     try {
       const user = this.jwtService.verify(token, {
         secret: this.configService.get<string>('JWT_SECRET'),
       });
 
       if (user) {
-        return true;
+        return isReturnUser ? user : true;
       }
 
       return false;
@@ -43,7 +43,7 @@ export class AuthService {
       if (err.message === 'invalid signature') {
         throw new UnauthorizedException('Beep Boop No Go');
       } else {
-        return false;
+        return isReturnUser ? null : false;
       }
     }
   }
@@ -63,6 +63,7 @@ export class AuthService {
     const payload = {
       email: user.email,
       sub: user.uuid,
+      companyUuid: user.company.uuid,
       usertype: user.usertype.key,
     }
 

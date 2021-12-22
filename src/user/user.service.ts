@@ -30,21 +30,23 @@ export class UserService {
     // !!! Return something?
   }
 
-  async findUserByEmail(email: string): Promise<User | undefined> {
+  async findUserByEmail(email: string, relations: string[] = []): Promise<User | undefined> {
     return await this.userRepository.findOne({
       where: {
         email: email,
-      }
+      },
+      relations: relations,
     });
   }
 
   // !!! Refactor?
-  async findUserByUuid(uuid: string): Promise<User | undefined> {
+  async findUserByUuid(uuid: string, relations: string[] = []): Promise<User | undefined> {
     return await this.userRepository.findOne({
       where: {
         uuid: uuid,
-      }
-    });
+      },
+      relations: relations,
+    },);
   }
 
   async updateUserByUuid(uuid: string, updateData: {}) {
@@ -53,11 +55,12 @@ export class UserService {
     }, updateData);
   }
 
-  async findUserByRefreshToken(token: string): Promise<User | undefined> {
+  async findUserByRefreshToken(token: string, relations: string[] = []): Promise<User | undefined> {
     return await this.userRepository.findOne({
       where: {
         refreshToken: token,
-      }
+      },
+      relations: relations,
     });
   }
 }
