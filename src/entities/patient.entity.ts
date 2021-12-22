@@ -33,12 +33,11 @@ export class Patient {
   })
   email: string;
 
-  @Column()
-  phone: number;
+  @Column("varchar", { length: 20 })
+  phone;
 
   @Column({
     name: 'company_id',
-    nullable: true,
   })
   companyId: number;
 

@@ -33,16 +33,23 @@ export class Booking {
   @Column({
     name: 'start_time',
     type: "time",
+    nullable: true,
  })
   startTime;
 
   @Column({
     name: 'end_time',
     type: "time",
+    nullable: true,
  })
   endTime;
 
   @Column()
+  title: string;
+
+  @Column({
+    nullable: true,
+  })
   notes: string;
   
   @Column({
