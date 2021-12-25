@@ -57,7 +57,7 @@ export class Booking {
   })
   patientId: number;
 
-  @ManyToOne(() => Patient, patient => patient.bookings)
+  @ManyToOne(() => Patient, patient => patient.bookings, { eager: true })
   @JoinColumn({
     name: 'patient_id',
   })
