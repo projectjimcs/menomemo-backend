@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Company } from 'src/entities/company.entity';
@@ -27,5 +27,23 @@ export class BookingsService {
     });
 
     return bookings;
+  }
+
+  async getBookingById(id: number, relations: string[] = []): Promise<Booking | undefined> {
+    const booking = await this.bookingRepository.findOne(id, {
+      relations: relations,
+    });
+
+    return booking;
+  }
+
+  async updateBookingById(id: number, updateObject) {
+    const saveStatus = await this.bookingRepository.update(id, updateObject);
+
+    if (saveStatus.affected) {
+      return await this.getBookingById(id);
+    }
+
+    throw new HttpException('UPDATE BOOKING ERROR', HttpStatus.BAD_REQUEST);
   }
 }
