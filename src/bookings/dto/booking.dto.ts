@@ -9,6 +9,18 @@ export class GetBookingResponseDto {
   patient;
 }
 
+export class AddBookingDto {
+  title: string;
+  notes: string;
+  date;
+  startTime;
+  endTime;
+  isCompleted: boolean;
+  isAllDay: boolean;
+  patient: string;
+  doctor: string;
+}
+
 export class UpdateBookingDto {
   title: string;
   notes: string;

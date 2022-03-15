@@ -60,13 +60,14 @@ export class AuthService {
   }
 
   async getAccessToken(user: any) {
+    console.log('in access token')
     const payload = {
       email: user.email,
       sub: user.uuid,
       companyUuid: user.company.uuid,
       usertype: user.usertype.key,
     }
-
+    console.log(payload);
     return this.jwtService.sign(payload);
   }
 }
