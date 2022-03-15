@@ -4,10 +4,13 @@ import { Repository } from 'typeorm';
 import { User } from 'src/entities/user.entity';
 import { CreateUserDto } from './dto/user.dto';
 import { UserType } from 'src/entities/usertype.entity';
+import { Company } from 'src/entities/company.entity';
 
 @Injectable()
 export class UserService {
   constructor(
+    @InjectRepository(Company)
+    private companyRepository: Repository<Company>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
     @InjectRepository(UserType)
@@ -62,5 +65,24 @@ export class UserService {
       },
       relations: relations,
     });
+  }
+
+  async getDoctorsByCompanyUuid(uuid: string): Promise<User[] | undefined> {
+    const company = await this.companyRepository.findOne({
+      where: {
+        uuid: uuid,
+      }
+    });
+
+    const doctors = await this.userRepository.find({
+      select: ['uuid', 'firstname', 'lastname', 'companyId', 'status', 'isDoctor'],
+      where: {
+        companyId: company.id,
+        status: 'active',
+        isDoctor: true,
+      }
+    });
+
+    return doctors;
   }
 }

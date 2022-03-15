@@ -64,7 +64,7 @@ export class Booking {
   patient: Patient;
 
   @Column({
-    name: 'booked_by',
+    name: 'booked_by', // !!! Should change this to booked_by_id
   })
   bookedBy: number;
 

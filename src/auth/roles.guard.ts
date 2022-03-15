@@ -84,7 +84,7 @@ export class RolesGuard implements CanActivate {
     if (user && usertypes.includes(user.usertype.key)) {
       const newToken = await this.authService.getAccessToken(user);
       const newRefreshToken = await this.authService.getRefreshToken(user.uuid);
-
+      console.log('in roles guard')
       const secretData = {
         token: newToken,
         refreshToken: newRefreshToken,
@@ -92,6 +92,7 @@ export class RolesGuard implements CanActivate {
       //!!! user object here a bit different than other one since other one is from jwt
       request.user = {
         email: user.email,
+        sub: user.uuid,
         companyUuid: user.company.uuid,
         usertype: user.usertype.key,
       }
